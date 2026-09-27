@@ -6,17 +6,17 @@ import type { User } from '../types/user'
 
 const users = ref<User[]>(usersData as User[])
 
-// Змінні стану для пошуку, фільтрації та сортування
+
 const searchQuery = ref('')
 const genderFilter = ref<'all' | 'male' | 'female'>('all')
 const ageFilter = ref<'all' | '18+'>('all')
 const sortBy = ref<'none' | 'name-asc' | 'name-desc' | 'age-asc' | 'age-desc'>('none')
 
-// Обчислювальний список із пошуком, фільтрацією та сортуванням
+
 const filteredUsers = computed(() => {
   let result = [...users.value]
 
-  // 1. Пошук за ім'ям, прізвищем або поштою
+  
   if (searchQuery.value.trim() !== '') {
     const query = searchQuery.value.toLowerCase().trim()
     result = result.filter(u => {
@@ -26,19 +26,19 @@ const filteredUsers = computed(() => {
     })
   }
 
-  // 2. Фільтрація за статтю
+  
   if (genderFilter.value === 'male') {
     result = result.filter(u => u.gender === 'male')
   } else if (genderFilter.value === 'female') {
     result = result.filter(u => u.gender === 'female')
   }
 
-  // 3. Фільтрація за віком (18+)
+  
   if (ageFilter.value === '18+') {
     result = result.filter(u => u.dob.age >= 18)
   }
 
-  // 4. Сортування (не ламає фільтрацію)
+  
   if (sortBy.value === 'name-asc') {
     result.sort((a, b) => a.name.first.localeCompare(b.name.first))
   } else if (sortBy.value === 'name-desc') {
@@ -52,7 +52,7 @@ const filteredUsers = computed(() => {
   return result
 })
 
-// Скидання всіх фільтрів та текстового пошуку
+
 function resetAll() {
   searchQuery.value = ''
   genderFilter.value = 'all'
@@ -67,9 +67,9 @@ function removeUser(id: number) {
 
 <template>
   <div class="users-container">
-    <!-- Тулбар над списком юзерів -->
+    
     <div class="toolbar">
-      <!-- Поле пошуку за ім'ям або поштою -->
+      
       <div class="filter-group">
         <span class="label">Пошук:</span>
         <input
@@ -80,7 +80,7 @@ function removeUser(id: number) {
         />
       </div>
 
-      <!-- Фільтр за статтю -->
+      
       <div class="filter-group">
         <span class="label">Стать:</span>
         <button :class="{ active: genderFilter === 'all' }" @click="genderFilter = 'all'">Всі</button>
@@ -88,14 +88,14 @@ function removeUser(id: number) {
         <button :class="{ active: genderFilter === 'female' }" @click="genderFilter = 'female'">Жінки</button>
       </div>
 
-      <!-- Фільтр за віком 18+ -->
+      
       <div class="filter-group">
         <span class="label">Вік:</span>
         <button :class="{ active: ageFilter === 'all' }" @click="ageFilter = 'all'">Всі</button>
         <button :class="{ active: ageFilter === '18+' }" @click="ageFilter = '18+'">18 +</button>
       </div>
 
-      <!-- Сортування -->
+      
       <div class="filter-group">
         <span class="label">Сортування:</span>
         <button :class="{ active: sortBy === 'name-asc' }" @click="sortBy = 'name-asc'">Ім’я ↑</button>
@@ -104,13 +104,13 @@ function removeUser(id: number) {
         <button :class="{ active: sortBy === 'age-desc' }" @click="sortBy = 'age-desc'">Вік ↓</button>
       </div>
 
-      <!-- Кнопка скидання -->
+      
       <div class="filter-group">
         <button class="reset-btn" @click="resetAll">Очистити все</button>
       </div>
     </div>
 
-    <!-- Список користувачів -->
+    
     <div v-if="filteredUsers.length > 0" class="users-list">
       <UserCard
         v-for="user in filteredUsers"
@@ -120,7 +120,7 @@ function removeUser(id: number) {
       />
     </div>
 
-    <!-- Повідомлення при порожньому списку -->
+    
     <p v-else class="empty-message">Список юзерів пустий</p>
   </div>
 </template>

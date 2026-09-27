@@ -109,7 +109,7 @@ function getTagStyle(index: number) {
 
       
       <div v-show="isOpen" class="details-content">
-        <!-- Поле details з об'єкта юзера -->
+        
         <section v-if="user.details" class="section-block">
           <div class="section-title">
             <span class="section-icon">📝</span>
