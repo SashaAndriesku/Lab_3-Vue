@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "gender": "female",
+    "name": {
+      "title": "Mrs",
+      "first": "Emma",
+      "last": "Lampi"
+    },
+    "location": {
+      "street": {
+        "number": 2304,
+        "name": "Siilitie"
+      },
+      "city": "Hausjärvi",
+      "state": "Uusimaa",
+      "country": "Finland",
+      "postcode": 98555,
+      "timezone": {
+        "offset": "+8:00",
+        "description": "Beijing, Perth, Singapore, Hong Kong"
+      }
+    },
+    "email": "emma.lampi@example.com",
+    "dob": {
+      "date": "2001-03-08T01:39:19.084Z",
+      "age": 25
+    },
+    "phone": "02-689-410",
+    "cell": "043-730-12-94",
+    "picture": "https://randomuser.me/api/portraits/women/87.jpg"
+  },
+  {
+    "id": 2,
+    "gender": "male",
+    "name": {
+      "title": "Mr",
+      "first": "John",
+      "last": "Doe"
+    },
+    "location": {
+      "street": {
+        "number": 123,
+        "name": "Main Street"
+      },
+      "city": "Helsinki",
+      "state": "Uusimaa",
+      "country": "Finland",
+      "postcode": 90100,
+      "timezone": {
+        "offset": "+2:00",
+        "description": "Helsinki, Kyiv"
+      }
+    },
+    "email": "john.doe@example.com",
+    "dob": {
+      "date": "1995-06-12T08:15:00.000Z",
+      "age": 31
+    },
+    "phone": "09-123-456",
+    "cell": "050-987-65-43",
+    "picture": "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    "id": 3,
+    "gender": "female",
+    "name": {
+      "title": "Ms",
+      "first": "Sofia",
+      "last": "Santos"
+    },
+    "location": {
+      "street": {
+        "number": 56,
+        "name": "Calle Mayor"
+      },
+      "city": "Madrid",
+      "state": "Madrid",
+      "country": "Spain",
+      "postcode": 28001,
+      "timezone": {
+        "offset": "+1:00",
+        "description": "Madrid, Paris, Berlin"
+      }
+    },
+    "email": "sofia.santos@example.com",
+    "dob": {
+      "date": "1998-11-20T14:22:10.000Z",
+      "age": 28
+    },
+    "phone": "912-345-678",
+    "cell": "612-345-678",
+    "picture": "https://randomuser.me/api/portraits/women/44.jpg"
+  }
+]
