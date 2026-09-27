@@ -10,13 +10,11 @@ defineEmits<{
   (e: 'delete', id: number): void
 }>()
 
-
 const isOpen = ref(true)
 
 function toggleOpen() {
   isOpen.value = !isOpen.value
 }
-
 
 const formattedDob = computed(() => {
   if (!props.user.dob?.date) return ''
@@ -27,37 +25,55 @@ const formattedDob = computed(() => {
   return `${day}.${month}.${year}`
 })
 
-
 const formattedGender = computed(() => {
   if (!props.user.gender) return ''
   return props.user.gender.charAt(0).toUpperCase() + props.user.gender.slice(1)
 })
 
 
-const defaultHobbies = [
-  { name: 'Travel', color: '#e0f2fe', textColor: '#0369a1' },
-  { name: 'Photography', color: '#f3e8ff', textColor: '#6b21a8' },
-  { name: 'Hiking', color: '#dcfce7', textColor: '#15803d' },
-  { name: 'Reading', color: '#fef3c7', textColor: '#b45309' },
-  { name: 'Cooking', color: '#ffe4e6', textColor: '#be123c' },
-  { name: 'Music', color: '#e0f2fe', textColor: '#0284c7' }
+const ageCategoryClass = computed(() => {
+  const age = props.user.dob?.age || 0
+  return {
+    minor: age < 18,
+    young: age >= 18 && age <= 30,
+    adult: age > 30 && age <= 50,
+    senior: age > 50
+  }
+})
+
+
+const tagColors = [
+  { bg: '#e0f2fe', color: '#0369a1' }, 
+  { bg: '#f3e8ff', color: '#7e22ce' }, 
+  { bg: '#dcfce7', color: '#15803d' }, 
+  { bg: '#fef3c7', color: '#b45309' }, 
+  { bg: '#ffe4e6', color: '#be123c' }  
 ]
+
+function getTagStyle(index: number) {
+  const palette = tagColors[index % tagColors.length]
+  return {
+    backgroundColor: palette.bg,
+    color: palette.color
+  }
+}
 </script>
 
 <template>
-  <div class="user-card-container">
-    
+  <div class="user-card-container" :class="ageCategoryClass">
     <div class="profile-sidebar">
-      <img :src="user.picture" :alt="user.name.first" class="avatar" />
+      
+      <img :src="user.picture" :alt="`${user.name.first} ${user.name.last}`" class="avatar" />
       
       <h2 class="full-name">
         {{ user.name.title }} {{ user.name.first }} {{ user.name.last }}
       </h2>
-
+      
       <div class="meta-row">
-        <span>♀ {{ formattedGender }}</span>
-        <span class="divider">|</span>
-        <span>📅 {{ user.dob.age }} years</span>
+        <span>👤 {{ formattedGender }}</span>
+        <span class="divider" v-if="user.dob.age > 18">|</span>
+        
+        <span v-if="user.dob.age > 18">📅 {{ user.dob.age }} years</span>
       </div>
 
       <div class="info-list">
@@ -82,23 +98,29 @@ const defaultHobbies = [
       <button class="delete-btn" @click="$emit('delete', user.id)">Видалити користувача</button>
     </div>
 
-    
     <div class="profile-details">
-      
       <div class="accordion-header" @click="toggleOpen">
         <div class="title-group">
           <span class="header-icon">👤</span>
           <h3>About me</h3>
         </div>
-        <span class="chevron" :class="{ rotated: !isOpen }">⌄</span>
+        <span class="chevron" :class="{ rotated: !isOpen }">∨</span>
       </div>
 
       
       <div v-show="isOpen" class="details-content">
-        
+        <!-- Поле details з об'єкта юзера -->
+        <section v-if="user.details" class="section-block">
+          <div class="section-title">
+            <span class="section-icon">📝</span>
+            <h4>Details</h4>
+          </div>
+          <p class="details-text">{{ user.details }}</p>
+        </section>
+
         <section class="section-block">
           <div class="section-title">
-            <span class="section-icon">🪪</span>
+            <span class="section-icon">💻</span>
             <h4>Personal Information</h4>
           </div>
           <div class="data-grid">
@@ -129,7 +151,6 @@ const defaultHobbies = [
           </div>
         </section>
 
-        
         <section class="section-block">
           <div class="section-title">
             <span class="section-icon">📍</span>
@@ -164,19 +185,19 @@ const defaultHobbies = [
         </section>
 
         
-        <section class="section-block">
+        <section class="section-block" v-if="user.hobbies && user.hobbies.length">
           <div class="section-title">
             <span class="section-icon">⭐</span>
             <h4>Hobbies</h4>
           </div>
           <div class="tags-container">
-            <span 
-              v-for="hobby in defaultHobbies" 
-              :key="hobby.name"
+            <span
+              v-for="(hobby, idx) in user.hobbies"
+              :key="hobby"
               class="hobby-tag"
-              :style="{ backgroundColor: hobby.color, color: hobby.textColor }"
+              :style="getTagStyle(idx)"
             >
-              {{ hobby.name }}
+              {{ hobby }}
             </span>
           </div>
         </section>
@@ -186,6 +207,20 @@ const defaultHobbies = [
 </template>
 
 <style scoped>
+
+.user-card-container.minor {
+  border-left: 6px solid #ef4444; 
+}
+.user-card-container.young {
+  border-left: 6px solid #3b82f6; 
+}
+.user-card-container.adult {
+  border-left: 6px solid #10b981; 
+}
+.user-card-container.senior {
+  border-left: 6px solid #8b5cf6; 
+}
+
 .user-card-container {
   display: flex;
   gap: 24px;
@@ -272,7 +307,6 @@ const defaultHobbies = [
   gap: 16px;
 }
 
-
 .accordion-header {
   display: flex;
   justify-content: space-between;
@@ -322,6 +356,13 @@ const defaultHobbies = [
   gap: 24px;
 }
 
+.details-text {
+  margin: 0;
+  color: #334155;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .section-block {
   display: flex;
   flex-direction: column;
@@ -368,14 +409,16 @@ const defaultHobbies = [
 .tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
+
 .hobby-tag {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  font-size: 0.85rem;
   font-weight: 600;
+  display: inline-block;
 }
 
 @media (max-width: 768px) {
